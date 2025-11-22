@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:smart_todoapp/data/database_helper.dart';
+import 'package:smart_todoapp/data/task_db.dart';
 import '/models/task.dart';
 import '/widgets/task_card.dart';
 
@@ -13,23 +13,23 @@ class ToDoAppPage extends StatefulWidget {
 class _ToDoAppPageState extends State<ToDoAppPage> {
   bool showTimeline = false;
 
-  final dbHelper = DatabaseHelper();
+  final dbHelper = TaskDb();
 
-void _addSampleTask() async {
-  final task = Task(
-    name: "Learn SQLite",
-    createdAt: DateTime.now(),
-    description: "Integrate SQLite with Flutter",
-    status: "pending",
-    priority: 1,
-  );
-  await dbHelper.insertTask(task);
-}
+  void _addSampleTask() async {
+    final task = Task(
+      name: "Learn SQLite",
+      createdAt: DateTime.now(),
+      description: "Integrate SQLite with Flutter",
+      status: "pending",
+      priority: 1,
+    );
+    await dbHelper.insertTask(task);
+  }
 
-void _loadTasks() async {
-  List<Task> tasks = await dbHelper.getAllTasks();
-  print("Loaded tasks: $tasks");
-}
+  void _loadTasks() async {
+    List<Task> tasks = await dbHelper.getAllTasks();
+    print("Loaded tasks: $tasks");
+  }
 
   // ✅ Example data using the Task model
   final List<Task> todayTasks = [
@@ -160,8 +160,9 @@ void _loadTasks() async {
                     isCompleted: task.status == "completed",
                     onToggle: () {
                       setState(() {
-                        task.status =
-                            (task.status == "completed") ? "pending" : "completed";
+                        task.status = (task.status == "completed")
+                            ? "pending"
+                            : "completed";
                       });
                     },
                     onDelete: () {
